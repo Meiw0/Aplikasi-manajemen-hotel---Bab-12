@@ -1,20 +1,8 @@
-"""
-============================================
-APLIKASI PERHOTELAN - Python + MySQL
-Versi Integrasi dengan UX Check-out Dinamis
-============================================
-Requirement: pip install mysql-connector-python
-"""
-
 import mysql.connector
 from mysql.connector import Error
 from datetime import datetime
 
-
-# ============================================
 # KONEKSI DATABASE
-# ============================================
-
 def get_connection():
     """Membuat koneksi ke database MySQL"""
     try:
@@ -29,11 +17,7 @@ def get_connection():
         print(f"[ERROR] Koneksi gagal: {e}")
         return None
 
-
-# ============================================
 # MODUL TAMU
-# ============================================
-
 def lihat_semua_tamu():
     conn = get_connection()
     if not conn:
@@ -99,11 +83,7 @@ def hapus_tamu(id_tamu):
     finally:
         conn.close()
 
-
-# ============================================
 # MODUL KAMAR
-# ============================================
-
 def lihat_kamar_tersedia():
     conn = get_connection()
     if not conn:
@@ -123,10 +103,7 @@ def lihat_kamar_tersedia():
     finally:
         conn.close()
 
-
-# ============================================
 # MODUL TRANSAKSI
-# ============================================
 
 def checkin_tamu_baru(nama, no_identitas, telepon, alamat, email, id_kamar, tgl_checkin):
     conn = get_connection()
@@ -297,10 +274,7 @@ def lihat_transaksi():
     finally:
         conn.close()
 
-
-# ============================================
 # MENU UTAMA (CLI)
-# ============================================
 
 def menu():
     while True:
