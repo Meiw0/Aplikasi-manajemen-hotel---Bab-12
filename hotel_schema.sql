@@ -1,10 +1,23 @@
 -- ============================================
 -- DATABASE APLIKASI PERHOTELAN
--- Bab 12: Aplikasi Dengan Basis Data
+-- Versi Sederhana (Manajemen Inti Tanpa Modul Konsumsi)
 -- ============================================
 
 CREATE DATABASE IF NOT EXISTS db_hotel;
 USE db_hotel;
+
+-- Membersihkan tabel lama agar sinkron dengan kode Python terbaru
+DROP TABLE IF EXISTS detail_konsumsi;
+DROP TABLE IF EXISTS stok_gudang;
+DROP TABLE IF EXISTS barang;
+DROP TABLE IF EXISTS gudang;
+DROP TABLE IF EXISTS transaksi;
+DROP TABLE IF EXISTS kamar;
+DROP TABLE IF EXISTS tamu;
+
+-- ============================================
+-- PEMBUATAN TABEL
+-- ============================================
 
 -- Tabel TAMU
 CREATE TABLE tamu (
@@ -26,33 +39,6 @@ CREATE TABLE kamar (
     status ENUM('Tersedia', 'Terisi', 'Maintenance') DEFAULT 'Tersedia'
 );
 
--- Tabel GUDANG
-CREATE TABLE gudang (
-    id_gudang INT AUTO_INCREMENT PRIMARY KEY,
-    nama_gudang VARCHAR(100) NOT NULL,
-    lokasi VARCHAR(100)
-);
-
--- Tabel BARANG
-CREATE TABLE barang (
-    id_barang INT AUTO_INCREMENT PRIMARY KEY,
-    nama_barang VARCHAR(100) NOT NULL,
-    stok INT DEFAULT 0,
-    harga DECIMAL(10,2) NOT NULL,
-    satuan VARCHAR(20)
-);
-
--- Tabel STOK_GUDANG (many-to-many BARANG & GUDANG)
-CREATE TABLE stok_gudang (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_barang INT NOT NULL,
-    id_gudang INT NOT NULL,
-    jumlah INT DEFAULT 0,
-    tgl_update DATE,
-    FOREIGN KEY (id_barang) REFERENCES barang(id_barang) ON DELETE CASCADE,
-    FOREIGN KEY (id_gudang) REFERENCES gudang(id_gudang) ON DELETE CASCADE
-);
-
 -- Tabel TRANSAKSI (check-in / check-out)
 CREATE TABLE transaksi (
     id_transaksi INT AUTO_INCREMENT PRIMARY KEY,
@@ -65,17 +51,6 @@ CREATE TABLE transaksi (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_tamu) REFERENCES tamu(id_tamu),
     FOREIGN KEY (id_kamar) REFERENCES kamar(id_kamar)
-);
-
--- Tabel DETAIL_KONSUMSI (barang yang dipakai tamu selama menginap)
-CREATE TABLE detail_konsumsi (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_transaksi INT NOT NULL,
-    id_barang INT NOT NULL,
-    jumlah INT NOT NULL DEFAULT 1,
-    subtotal DECIMAL(10,2),
-    FOREIGN KEY (id_transaksi) REFERENCES transaksi(id_transaksi) ON DELETE CASCADE,
-    FOREIGN KEY (id_barang) REFERENCES barang(id_barang)
 );
 
 -- ============================================
@@ -94,21 +69,3 @@ INSERT INTO kamar (no_kamar, tipe, harga_per_malam, status) VALUES
 ('202', 'Deluxe', 550000, 'Terisi'),
 ('301', 'Suite', 1200000, 'Tersedia'),
 ('401', 'Executive', 2000000, 'Tersedia');
-
-INSERT INTO gudang (nama_gudang, lokasi) VALUES
-('Gudang Utama', 'Lantai B1'),
-('Gudang Minuman', 'Lantai 1 Belakang');
-
-INSERT INTO barang (nama_barang, stok, harga, satuan) VALUES
-('Air Mineral 600ml', 100, 8000, 'botol'),
-('Sabun Mandi', 50, 5000, 'buah'),
-('Handuk Kecil', 30, 15000, 'lembar'),
-('Kopi Sachet', 200, 3000, 'sachet'),
-('Teh Celup', 200, 2000, 'sachet'),
-('Snack Keripik', 80, 12000, 'bungkus');
-
-INSERT INTO stok_gudang (id_barang, id_gudang, jumlah, tgl_update) VALUES
-(1, 1, 50, CURDATE()), (1, 2, 50, CURDATE()),
-(2, 1, 50, CURDATE()), (3, 1, 30, CURDATE()),
-(4, 2, 100, CURDATE()), (5, 2, 100, CURDATE()),
-(6, 2, 80, CURDATE());
