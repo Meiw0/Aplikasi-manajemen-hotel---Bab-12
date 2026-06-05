@@ -1,23 +1,9 @@
--- ============================================
--- DATABASE APLIKASI PERHOTELAN
--- Versi Sederhana (Manajemen Inti Tanpa Modul Konsumsi)
--- ============================================
-
 CREATE DATABASE IF NOT EXISTS db_hotel;
 USE db_hotel;
 
--- Membersihkan tabel lama agar sinkron dengan kode Python terbaru
-DROP TABLE IF EXISTS detail_konsumsi;
-DROP TABLE IF EXISTS stok_gudang;
-DROP TABLE IF EXISTS barang;
-DROP TABLE IF EXISTS gudang;
 DROP TABLE IF EXISTS transaksi;
 DROP TABLE IF EXISTS kamar;
 DROP TABLE IF EXISTS tamu;
-
--- ============================================
--- PEMBUATAN TABEL
--- ============================================
 
 -- Tabel TAMU
 CREATE TABLE tamu (
@@ -53,19 +39,21 @@ CREATE TABLE transaksi (
     FOREIGN KEY (id_kamar) REFERENCES kamar(id_kamar)
 );
 
--- ============================================
--- DATA SAMPLE
--- ============================================
-
-INSERT INTO tamu (nama, no_identitas, telepon, alamat, email) VALUES
-('Budi Santoso', '3374010101900001', '081234567890', 'Jl. Merdeka No.1 Semarang', 'budi@email.com'),
-('Siti Rahayu', '3374020202910002', '082345678901', 'Jl. Veteran No.5 Solo', 'siti@email.com'),
-('Ahmad Fauzi', '3374030303920003', '083456789012', 'Jl. Diponegoro No.10 Yogya', 'ahmad@email.com');
-
+-- DATA SAMPLE KAMAR (Total 16 Kamar)
 INSERT INTO kamar (no_kamar, tipe, harga_per_malam, status) VALUES
 ('101', 'Standard', 350000, 'Tersedia'),
 ('102', 'Standard', 350000, 'Tersedia'),
-('201', 'Deluxe', 550000, 'Tersedia'),
-('202', 'Deluxe', 550000, 'Terisi'),
-('301', 'Suite', 1200000, 'Tersedia'),
-('401', 'Executive', 2000000, 'Tersedia');
+('103', 'Deluxe', 550000, 'Tersedia'),
+('104', 'Deluxe', 550000, 'Terisi'),
+('105', 'Suite', 1200000, 'Tersedia'),
+('106', 'Executive', 2000000, 'Tersedia'),
+('107', 'Standard', 350000, 'Tersedia'),
+('108', 'Standard', 350000, 'Terisi'),
+('109', 'Standard', 350000, 'Tersedia'),
+('110', 'Deluxe', 550000, 'Tersedia'),
+('111', 'Deluxe', 550000, 'Tersedia'),
+('112', 'Suite', 1200000, 'Tersedia'),
+('113', 'Suite', 1200000, 'Terisi'),
+('114', 'Executive', 2000000, 'Tersedia'),
+('115', 'Executive', 2000000, 'Tersedia'),
+('116', 'Executive', 2000000, 'Tersedia');
